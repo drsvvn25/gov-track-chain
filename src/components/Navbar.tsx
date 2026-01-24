@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useWallet } from '@/context/WalletContext';
-import { Shield, Wallet, LogOut, Menu, X } from 'lucide-react';
+import { Shield, Wallet, LogOut, Menu, X, Book } from 'lucide-react';
 import { useState } from 'react';
+import ThemeToggle from './ThemeToggle';
+import RoleSelector from './RoleSelector';
 
 const Navbar = () => {
   const { address, isConnecting, connectWallet, disconnectWallet, isAdmin } = useWallet();
@@ -14,6 +16,7 @@ const Navbar = () => {
     { path: '/submit', label: 'Submit Request' },
     { path: '/track', label: 'Track' },
     { path: '/dashboard', label: 'Dashboard' },
+    { path: '/public-ledger', label: 'Public Ledger' },
     ...(isAdmin ? [{ path: '/admin', label: 'Admin' }] : []),
   ];
 
@@ -36,7 +39,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-4">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -52,8 +55,17 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Wallet Button */}
-          <div className="flex items-center gap-3">
+          {/* Right Side Controls */}
+          <div className="flex items-center gap-2">
+            {/* Role Selector - Desktop */}
+            <div className="hidden md:block">
+              <RoleSelector />
+            </div>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
+            {/* Wallet Button */}
             {address ? (
               <div className="flex items-center gap-2">
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50">
@@ -85,7 +97,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="lg:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -95,7 +107,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border/30 animate-fade-in">
+          <div className="lg:hidden py-4 border-t border-border/30 animate-fade-in">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -110,6 +122,10 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
+            {/* Mobile Role Selector */}
+            <div className="pt-4 border-t border-border/30 mt-4">
+              <RoleSelector />
+            </div>
           </div>
         )}
       </div>
