@@ -10,6 +10,7 @@ import Submit from "./pages/Submit";
 import Track from "./pages/Track";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
+import PublicLedger from "./pages/PublicLedger";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/track" element={<Track />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/public-ledger" element={<PublicLedger />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

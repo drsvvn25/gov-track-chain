@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { getAllRequests, getStatistics, ServiceRequest } from '@/lib/blockchain';
 import RequestCard from '@/components/RequestCard';
 import StatCard from '@/components/StatCard';
-import { BarChart3, Clock, Loader2, CheckCircle, AlertCircle, TrendingUp, RefreshCw } from 'lucide-react';
+import AnalyticsCharts from '@/components/AnalyticsCharts';
+import { BarChart3, Clock, Loader2, CheckCircle, AlertCircle, TrendingUp, RefreshCw, ChartPie } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
@@ -10,6 +11,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState({ total: 0, pending: 0, inProgress: 0, completed: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'Pending' | 'InProgress' | 'Completed'>('all');
+  const [showCharts, setShowCharts] = useState(true);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -51,10 +53,20 @@ const Dashboard = () => {
               Real-time overview of all government service requests on blockchain
             </p>
           </div>
-          <Button onClick={loadData} variant="outline" disabled={isLoading}>
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              onClick={() => setShowCharts(!showCharts)} 
+              variant={showCharts ? "default" : "outline"}
+              size="sm"
+            >
+              <ChartPie className="w-4 h-4" />
+              Analytics
+            </Button>
+            <Button onClick={loadData} variant="outline" disabled={isLoading}>
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </div>
         </div>
 
         {isLoading ? (
@@ -90,6 +102,13 @@ const Dashboard = () => {
                 variant="success"
               />
             </div>
+
+            {/* Analytics Charts */}
+            {showCharts && requests.length > 0 && (
+              <div className="mb-10">
+                <AnalyticsCharts requests={requests} />
+              </div>
+            )}
 
             {/* Filter Tabs */}
             <div className="flex flex-wrap gap-2 mb-8">

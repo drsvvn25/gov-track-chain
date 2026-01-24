@@ -6,7 +6,69 @@
 
 @layer base {
   :root {
-    /* Government Trust + Blockchain Tech palette */
+    /* Light mode - Professional Government style */
+    --background: 210 40% 98%;
+    --foreground: 220 30% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 30% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 30% 10%;
+
+    /* Cyan/Teal - Blockchain accent */
+    --primary: 187 80% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Light navy secondary */
+    --secondary: 220 20% 92%;
+    --secondary-foreground: 220 30% 10%;
+
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 15% 40%;
+
+    --accent: 187 80% 35%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Success green */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 220 30% 10%;
+
+    --border: 220 15% 85%;
+    --input: 220 15% 92%;
+    --ring: 187 80% 35%;
+
+    --radius: 0.75rem;
+
+    /* Custom gradients - Light */
+    --gradient-primary: linear-gradient(135deg, hsl(187 80% 35%) 0%, hsl(200 70% 45%) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(210 40% 98%) 0%, hsl(210 40% 96%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
+    --gradient-glow: radial-gradient(ellipse at center, hsl(187 80% 35% / 0.1) 0%, transparent 70%);
+
+    /* Shadows - Light */
+    --shadow-glow: 0 0 40px hsl(187 80% 35% / 0.15);
+    --shadow-card: 0 4px 24px hsl(220 30% 10% / 0.08);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 30% 10%;
+    --sidebar-primary: 187 80% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 92%;
+    --sidebar-accent-foreground: 220 30% 10%;
+    --sidebar-border: 220 15% 85%;
+    --sidebar-ring: 187 80% 35%;
+  }
+
+  .dark {
+    /* Dark mode - Government Trust + Blockchain Tech palette */
     --background: 220 30% 6%;
     --foreground: 210 40% 98%;
 
@@ -45,15 +107,13 @@
     --input: 220 20% 18%;
     --ring: 187 92% 43%;
 
-    --radius: 0.75rem;
-
-    /* Custom gradients */
+    /* Custom gradients - Dark */
     --gradient-primary: linear-gradient(135deg, hsl(187 92% 43%) 0%, hsl(200 80% 50%) 100%);
     --gradient-dark: linear-gradient(180deg, hsl(220 30% 8%) 0%, hsl(220 30% 4%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(220 25% 12%) 0%, hsl(220 25% 8%) 100%);
     --gradient-glow: radial-gradient(ellipse at center, hsl(187 92% 43% / 0.15) 0%, transparent 70%);
 
-    /* Shadows */
+    /* Shadows - Dark */
     --shadow-glow: 0 0 40px hsl(187 92% 43% / 0.2);
     --shadow-card: 0 4px 24px hsl(220 30% 4% / 0.5);
 

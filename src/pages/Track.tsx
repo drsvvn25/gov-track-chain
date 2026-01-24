@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { getRequest, ServiceRequest } from '@/lib/blockchain';
 import StatusBadge from '@/components/StatusBadge';
-import { Search, Loader2, AlertCircle, ExternalLink, Clock, User, FileText, Hash } from 'lucide-react';
+import BlockchainExplorer from '@/components/BlockchainExplorer';
+import { Search, Loader2, AlertCircle, Clock, User, FileText, Hash, CheckCircle } from 'lucide-react';
 
 const Track = () => {
   const [searchParams] = useSearchParams();
@@ -61,9 +62,27 @@ const Track = () => {
     if (!request) return [];
     
     const timeline = [
-      { status: 'Submitted', completed: true, current: request.status === 'Pending' },
-      { status: 'In Progress', completed: request.status === 'InProgress' || request.status === 'Completed', current: request.status === 'InProgress' },
-      { status: 'Completed', completed: request.status === 'Completed', current: request.status === 'Completed' },
+      { 
+        status: 'Submitted', 
+        completed: true, 
+        current: request.status === 'Pending',
+        icon: FileText,
+        date: formatDate(request.timestamp)
+      },
+      { 
+        status: 'In Progress', 
+        completed: request.status === 'InProgress' || request.status === 'Completed', 
+        current: request.status === 'InProgress',
+        icon: Clock,
+        date: request.status !== 'Pending' ? 'Processing...' : ''
+      },
+      { 
+        status: 'Completed', 
+        completed: request.status === 'Completed', 
+        current: request.status === 'Completed',
+        icon: CheckCircle,
+        date: request.status === 'Completed' ? 'Done!' : ''
+      },
     ];
     
     return timeline;
@@ -72,7 +91,7 @@ const Track = () => {
   return (
     <div className="min-h-screen pt-24 pb-12">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
             <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
@@ -173,61 +192,53 @@ const Track = () => {
                     </div>
                   </div>
 
-                  {/* Status Timeline */}
+                  {/* Enhanced Status Timeline */}
                   <div className="glass-card p-8">
                     <h3 className="font-display font-semibold mb-6">Status Timeline</h3>
-                    <div className="flex items-center justify-between">
-                      {getStatusTimeline().map((item, index) => (
-                        <div key={item.status} className="flex-1 relative">
-                          <div className="flex flex-col items-center">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${
+                    <div className="relative">
+                      {/* Timeline Line */}
+                      <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-border" />
+                      
+                      <div className="space-y-6">
+                        {getStatusTimeline().map((item, index) => (
+                          <div key={item.status} className="relative flex items-start gap-4 pl-2">
+                            {/* Timeline Dot */}
+                            <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center ${
                               item.current
-                                ? 'bg-primary animate-pulse-glow'
+                                ? 'bg-primary animate-pulse-glow ring-4 ring-primary/20'
                                 : item.completed
                                   ? 'bg-success'
-                                  : 'bg-muted border border-border'
+                                  : 'bg-muted border-2 border-border'
                             }`}>
                               {item.completed && !item.current ? (
-                                <span className="text-success-foreground">✓</span>
+                                <CheckCircle className="w-4 h-4 text-success-foreground" />
                               ) : (
-                                <span className={item.current ? 'text-primary-foreground' : 'text-muted-foreground'}>
-                                  {index + 1}
-                                </span>
+                                <item.icon className={`w-4 h-4 ${item.current ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
                               )}
                             </div>
-                            <span className={`text-sm font-medium ${item.current ? 'text-primary' : 'text-muted-foreground'}`}>
-                              {item.status}
-                            </span>
+                            
+                            {/* Timeline Content */}
+                            <div className={`flex-1 pb-6 ${index === 2 ? 'pb-0' : ''}`}>
+                              <p className={`font-medium ${item.current ? 'text-primary' : item.completed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                {item.status}
+                              </p>
+                              {item.date && (
+                                <p className="text-sm text-muted-foreground">{item.date}</p>
+                              )}
+                              {item.current && (
+                                <div className="mt-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs inline-block">
+                                  Current Status
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          {index < 2 && (
-                            <div className={`absolute top-5 left-[55%] w-[90%] h-0.5 ${
-                              item.completed && !item.current ? 'bg-success' : 'bg-muted'
-                            }`} />
-                          )}
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Blockchain Info */}
-                  <div className="glass-card p-6">
-                    <h3 className="font-display font-semibold mb-4">Blockchain Verification</h3>
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-                      <div>
-                        <span className="text-xs text-muted-foreground">Transaction Hash</span>
-                        <p className="font-mono text-sm">{request.txHash.slice(0, 24)}...</p>
-                      </div>
-                      <a 
-                        href={`https://sepolia.etherscan.io/tx/${request.txHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-primary hover:text-primary/80 text-sm"
-                      >
-                        View on Explorer
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </div>
+                  {/* Blockchain Explorer */}
+                  <BlockchainExplorer request={request} />
                 </div>
               ) : null}
             </div>
